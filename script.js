@@ -25,35 +25,36 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  const closeMenu = () => {
+    navMenu.classList.remove('open');
+    hamburger.classList.remove('active');
+    navbar.classList.remove('menu-open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+
   /* Hamburger toggle */
   hamburger.addEventListener('click', () => {
     const isOpen = navMenu.classList.toggle('open');
     hamburger.classList.toggle('active', isOpen);
+    navbar.classList.toggle('menu-open', isOpen);
     hamburger.setAttribute('aria-expanded', isOpen);
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
   /* Close menu when a link is clicked */
   navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      navMenu.classList.remove('open');
-      hamburger.classList.remove('active');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    });
+    link.addEventListener('click', closeMenu);
   });
 
-  /* Close menu on outside click */
+  /* Close menu on outside click (overlay click) */
   document.addEventListener('click', e => {
     if (
       navMenu.classList.contains('open') &&
       !navMenu.contains(e.target) &&
       !hamburger.contains(e.target)
     ) {
-      navMenu.classList.remove('open');
-      hamburger.classList.remove('active');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      closeMenu();
     }
   });
 
