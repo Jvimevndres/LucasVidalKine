@@ -16,6 +16,7 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   const navbar    = $('#navbar');
   const hamburger = $('#hamburger');
   const navMenu   = $('#nav-menu');
+  const overlay   = $('#nav-overlay');
   const navLinks  = $$('.navbar__link');
 
   /* Scroll → add shadow */
@@ -25,37 +26,36 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  const openMenu = () => {
+    navMenu.classList.add('open');
+    hamburger.classList.add('active');
+    hamburger.setAttribute('aria-expanded', 'true');
+    if (overlay) overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
   const closeMenu = () => {
     navMenu.classList.remove('open');
     hamburger.classList.remove('active');
-    navbar.classList.remove('menu-open');
     hamburger.setAttribute('aria-expanded', 'false');
+    if (overlay) overlay.classList.remove('active');
     document.body.style.overflow = '';
   };
 
   /* Hamburger toggle */
   hamburger.addEventListener('click', () => {
-    const isOpen = navMenu.classList.toggle('open');
-    hamburger.classList.toggle('active', isOpen);
-    navbar.classList.toggle('menu-open', isOpen);
-    hamburger.setAttribute('aria-expanded', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    navMenu.classList.contains('open') ? closeMenu() : openMenu();
   });
 
-  /* Close menu when a link is clicked */
-  navLinks.forEach(link => {
-    link.addEventListener('click', closeMenu);
-  });
+  /* Close on link click */
+  navLinks.forEach(link => link.addEventListener('click', closeMenu));
 
-  /* Close menu on outside click (overlay click) */
-  document.addEventListener('click', e => {
-    if (
-      navMenu.classList.contains('open') &&
-      !navMenu.contains(e.target) &&
-      !hamburger.contains(e.target)
-    ) {
-      closeMenu();
-    }
+  /* Close on overlay click */
+  if (overlay) overlay.addEventListener('click', closeMenu);
+
+  /* Close on Escape key */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && navMenu.classList.contains('open')) closeMenu();
   });
 
   /* Active link on scroll (IntersectionObserver) */

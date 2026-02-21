@@ -187,6 +187,23 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   outline-offset: 3px;
 }
 
+/* ── Overlay móvil (fuera del navbar para evitar conflicto sticky) ── */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* ================================================================
    NAVBAR
 ================================================================ */
@@ -205,21 +222,6 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
 
 .navbar.scrolled {
   box-shadow: var(--shadow-md);
-}
-
-/* Overlay oscuro detrás del menú móvil */
-.navbar::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0);
-  z-index: 998;
-  pointer-events: none;
-  transition: background 0.32s ease;
-}
-.navbar.menu-open::after {
-  background: rgba(0, 0, 0, 0.45);
-  pointer-events: auto;
 }
 
 .navbar__inner {
@@ -1146,32 +1148,34 @@ a.info-card:hover {
   /* --- Navbar --- */
   .navbar__hamburger { display: flex; }
 
-  /* Ocultar el nav del flujo normal en móvil */
+  /* Menú móvil: panel deslizante a pantalla completa */
   .navbar__menu {
     position: fixed;
     top: var(--navbar-h);
     left: 0;
     right: 0;
     bottom: 0;
-    background: #fff;
-    padding: var(--space-sm) var(--space-sm) var(--space-xl);
-    transform: translateX(100%);
-    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    min-height: calc(100dvh - var(--navbar-h));
+    background: #ffffff;
+    padding: var(--space-md) var(--space-sm) var(--space-xl);
+    transform: translateX(110%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
-    z-index: 999;
-    border-top: 1px solid var(--clr-border);
-    box-shadow: none;
+    overflow-x: hidden;
+    z-index: 1001;
+    border-top: 2px solid var(--clr-primary-light);
+    -webkit-overflow-scrolling: touch;
   }
   .navbar__menu.open {
     transform: translateX(0);
-    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
   }
 
   .navbar__list {
     flex-direction: column;
     align-items: stretch;
-    gap: 6px;
-    padding-top: 0;
+    gap: 4px;
+    width: 100%;
   }
 
   .navbar__link {
@@ -1182,28 +1186,34 @@ a.info-card:hover {
     font-weight: var(--fw-medium);
     border-radius: var(--radius-md);
     color: var(--clr-text);
+    width: 100%;
     border: 1.5px solid transparent;
-    transition: var(--transition);
+    transition: background 0.2s, color 0.2s;
   }
-  .navbar__link:hover {
+  .navbar__link:hover,
+  .navbar__link:active {
     background: var(--clr-primary-light);
     color: var(--clr-primary);
     border-color: var(--clr-border);
   }
 
   .navbar__link--cta {
+    display: flex;
     justify-content: center;
     margin-top: var(--space-sm);
-    padding: 16px 18px;
+    padding: 18px;
     font-size: 1.05rem;
+    font-weight: var(--fw-semi);
     background: var(--clr-primary) !important;
-    color: #fff !important;
+    color: #ffffff !important;
     border-color: transparent !important;
-    box-shadow: 0 4px 16px rgba(0,93,242,0.3);
+    box-shadow: 0 4px 16px rgba(0, 93, 242, 0.3);
   }
-  .navbar__link--cta:hover {
+  .navbar__link--cta:hover,
+  .navbar__link--cta:active {
     background: var(--clr-primary-dark) !important;
     transform: none;
+    box-shadow: 0 6px 20px rgba(0, 93, 242, 0.4);
   }
 
   /* --- Hero --- */
