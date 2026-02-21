@@ -187,22 +187,7 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   outline-offset: 3px;
 }
 
-/* ── Overlay móvil (fuera del navbar para evitar conflicto sticky) ── */
-.nav-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.nav-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
+
 
 /* ================================================================
    NAVBAR

@@ -16,7 +16,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   const navbar    = $('#navbar');
   const hamburger = $('#hamburger');
   const navMenu   = $('#nav-menu');
-  const overlay   = $('#nav-overlay');
   const navLinks  = $$('.navbar__link');
 
   /* Scroll → add shadow */
@@ -30,7 +29,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
     navMenu.classList.add('open');
     hamburger.classList.add('active');
     hamburger.setAttribute('aria-expanded', 'true');
-    if (overlay) overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   };
 
@@ -38,7 +36,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
     navMenu.classList.remove('open');
     hamburger.classList.remove('active');
     hamburger.setAttribute('aria-expanded', 'false');
-    if (overlay) overlay.classList.remove('active');
     document.body.style.overflow = '';
   };
 
@@ -50,16 +47,14 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   /* Close on link click */
   navLinks.forEach(link => link.addEventListener('click', closeMenu));
 
-  /* Close on overlay click */
-  if (overlay) overlay.addEventListener('click', closeMenu);
-
   /* Close on Escape key */
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && navMenu.classList.contains('open')) closeMenu();
   });
 
   /* Active link on scroll (IntersectionObserver) */
-  const sections = $$('section[id], div[id]');
+  /* Solo secciones reales del contenido */
+  const sections = $$('section[id]');
 
   const activateLink = (id) => {
     navLinks.forEach(link => {
