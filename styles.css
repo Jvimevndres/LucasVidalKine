@@ -505,6 +505,14 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   color: var(--clr-text-muted);
   font-weight: var(--fw-medium);
 }
+.stats__desc {
+  font-size: 0.72rem;
+  color: var(--clr-text-muted);
+  font-weight: var(--fw-light);
+  line-height: 1.4;
+  max-width: 180px;
+  margin-top: 2px;
+}
 
 /* ================================================================
    SOBRE MÍ
@@ -930,6 +938,20 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   padding: 12px 16px;
 }
 .form-success.visible { display: flex; }
+
+/* Privacy notice */
+.form-privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--clr-text-muted);
+  line-height: 1.5;
+  padding: 10px 14px;
+  background: var(--clr-primary-light);
+  border-radius: var(--radius-sm);
+}
+.form-privacy i { color: var(--clr-primary); margin-top: 2px; flex-shrink: 0; }
 
 /* Map column */
 .contact__info-cards {
