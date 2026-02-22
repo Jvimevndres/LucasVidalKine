@@ -462,16 +462,29 @@
               Tus datos son confidenciales y solo se usarán para responder tu consulta, conforme a la Ley 19.628 de protección de datos personales.
             </p>
 
-            <button type="submit" class="btn btn--primary btn--full">
+            <button type="submit" class="btn btn--primary btn--full" id="submit-btn">
               <i class="fa-solid fa-paper-plane"></i>
               Enviar mensaje
             </button>
 
-            <p class="form-success" id="form-success" role="status" aria-live="polite">
-              <i class="fa-solid fa-circle-check"></i>
-              ¡Mensaje enviado! Me comunicaré contigo pronto.
-            </p>
           </form>
+
+          <!-- Overlay de éxito -->
+          <div class="form-success" id="form-success" role="status" aria-live="polite">
+            <div class="form-success__card">
+              <div class="form-success__icon">
+                <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle class="form-success__circle" cx="26" cy="26" r="23" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                  <path class="form-success__check" d="M14.5 27l8.5 8.5 15-17" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="form-success__title">¡Mensaje enviado!</h3>
+              <p class="form-success__text">Lucas se comunicará contigo a la brevedad para coordinar tu cita.</p>
+              <div class="form-success__bar" aria-hidden="true"><span class="form-success__bar-fill" id="success-bar"></span></div>
+              <p class="form-success__hint">Este mensaje se cerrará en unos segundos…</p>
+            </div>
+          </div>
+
         </div>
 
         <!-- Columna Mapa + Info -->

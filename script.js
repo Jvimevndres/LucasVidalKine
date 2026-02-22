@@ -184,13 +184,34 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
    5. CONTACT FORM — client-side UX (Netlify handles submission)
 ================================================================ */
 (function initContactForm() {
-  const form    = $('#contact-form');
-  const success = $('#form-success');
-  if (!form) return;
+  const form      = $('#contact-form');
+  const success   = $('#form-success');
+  const bar       = $('#success-bar');
+  if (!form || !success) return;
+
+  const DELAY = 6000;
+
+  function showSuccess() {
+    form.reset();
+    success.classList.add('visible');
+    success.closest('.contact__form-col')
+           .scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    /* Trigger progress bar (needs a tiny delay to start transition) */
+    if (bar) {
+      bar.classList.remove('running');
+      void bar.offsetWidth; /* reflow */
+      bar.classList.add('running');
+    }
+
+    setTimeout(() => {
+      success.classList.remove('visible');
+      if (bar) bar.classList.remove('running');
+    }, DELAY);
+  }
 
   form.addEventListener('submit', async (e) => {
-    /* Netlify handles actual POST; we add UX feedback */
-    const submitBtn = form.querySelector('[type="submit"]');
+    const submitBtn = $('#submit-btn');
 
     /* Simple client validation */
     const nombre  = $('#nombre', form).value.trim();
@@ -199,39 +220,32 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
     if (!nombre || !email || !mensaje) {
       shakeForm(form);
-      return; /* Let native HTML5 validation show messages */
+      return;
     }
 
-    /* Show loading state */
+    /* Loading state */
     submitBtn.disabled = true;
+    submitBtn.classList.add('btn--loading');
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando…';
 
     try {
-      /* Netlify intercepts this fetch in production */
       const body = new URLSearchParams(new FormData(form)).toString();
       const res  = await fetch('/', {
         method : 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body,
       });
-
       if (res.ok) {
-        form.reset();
-        success.classList.add('visible');
-        success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-        /* Hide success after 6s */
-        setTimeout(() => success.classList.remove('visible'), 6000);
+        showSuccess();
       } else {
         throw new Error('Response not OK');
       }
     } catch (_) {
-      /* Fallback: show success anyway (Netlify intercepts before JS sees errors) */
-      form.reset();
-      success.classList.add('visible');
-      setTimeout(() => success.classList.remove('visible'), 6000);
+      /* Netlify intercepts before JS sees network errors — show success anyway */
+      showSuccess();
     } finally {
       submitBtn.disabled = false;
+      submitBtn.classList.remove('btn--loading');
       submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar mensaje';
     }
   });
